@@ -63,13 +63,13 @@ class Dashboard extends React.Component{
     }
 }
 
-// const mapStateToProps = (state) => {
-//     return {
-//         user: state.login,
-//         goals: state.goals,
-//         friends: state.friends
-//     }
-// }
+const mapStateToProps = (state) => {
+    return {
+        user: state.login,
+        goals: state.goals,
+        friends: state.friends
+    }
+}
 
 const mapDispatchToProps = {
     currentUser,
@@ -77,4 +77,4 @@ const mapDispatchToProps = {
     listingFriends
 }
 
-export default connect(null, mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

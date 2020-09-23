@@ -11,17 +11,23 @@ const IndividualGoal = (props) =>{
     // debugger
     const { id } = props.match.params
     // const currentGoal = props.goals.find(element => element.goal.id !== id)
-    const { markers } = props.goal
+    const { markers } = props.current
     const status = markers.filter(marker => marker.accomplished === true).length / markers.length
 
     // console.log(currentGoal.ugg_id)
     console.log(props)
 
     const handleClick = event =>{
+        const token = localStorage.getItem('userToken')
+        const url = props.current.goal.multi_user === true ? `http://localhost:3000/user_group_goals/${props.current.ugg_id}` : `http://localhost:3000/goals/${props.current.goal.id}`
         if(event.target.name === 'remove goal'){
             // fetch to delete on backend, include reducer action in that function
-            props.deleteGoal(props.goal.ugg_id)
-            props.history.push('/dashboard/goals')
+            fetch(url, {method: 'DELETE', headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'}})
+                .then(response => response.json())
+                    .then(
+                        props.deleteGoal(props.current.ugg_id),
+                        props.history.push('/dashboard/goals')
+                    )
             // alert('Are you sure you want to delete this goal?')
             // modal
         } else {
@@ -45,7 +51,7 @@ const IndividualGoal = (props) =>{
 }
 
 const mapStateToProps = (state) =>{
-    return { goal: state.currentGoal }
+    return { current: state.currentGoal }
 }
 
 const mapDispatchToProps = {

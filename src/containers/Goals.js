@@ -10,10 +10,11 @@ const Goals = (props) =>{
    
     const {pathname} = props.location
     const handleClick = (event) =>{
+        console.log(event.target.name)
         if(event.target.name === 'personal'){
-            return filteredGoals = props.goals.filter(goal => goal.multi_user === false)
+            return filteredGoals = props.goals.filter(goal => goal.goal.multi_user === false)
         } else if (event.target.name === 'shared') {
-           return filteredGoals = props.goals.filter(goal => goal.multi_user !== false)
+           return filteredGoals = props.goals.filter(goal => goal.goal.multi_user !== false)
         }
     }
 
@@ -21,7 +22,7 @@ const Goals = (props) =>{
         <div>CONTAINER
 
             <div>
-                <Link to='/dashboard/goals'>All</Link> | 
+                <Link to='/dashboard/goals' name='all'>All</Link> | 
                 <Link to='/dashboard/goals/personal' onClick={handleClick} name='personal'>Personal</Link> | 
                 <Link to='/dashboard/goals/shared' onClick={handleClick} name='shared'>Shared</Link>
             </div>

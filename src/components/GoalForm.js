@@ -24,6 +24,8 @@ class GoalForm extends React.Component{
        if(this.props.location.pathname.includes('/dashboard/goals/edit/')){
         const { goal, comp, markers } = this.props.current
         const { title, multi_user, publicly_viewable, deadline } = goal
+        let friend_info =  comp.length > 0 ? comp[0].first_name : ""
+
             this.setState({ 
             editMode: !this.state.editMode,
             title: title,
@@ -31,7 +33,7 @@ class GoalForm extends React.Component{
             markerChange: false,
             publicly_viewable: publicly_viewable,
             deadline: deadline, 
-            friend: comp[0].first_name,
+            friend: friend_info,
             markers: markers
         })}
     }
@@ -91,7 +93,7 @@ class GoalForm extends React.Component{
             })
         } else {
             this.setState({
-                markers: [...this.state.markers, {title: '', notes: '', accomplished: false}]
+                markers: [...this.state.markers, {title: '', notes: '', accomplished: false, status: 'new'}]
             })
         }
     }
@@ -105,13 +107,13 @@ class GoalForm extends React.Component{
 
         if(event.target.name === 'Submit'){
             delete this.state['editMode']
-            console.log (this.state)
+            // console.log (this.state)
             // fetch to submit new goal
             // backend should automatically create a new UGG with appropriate IDs
             // should then use dispatch action addGoal to add to state
             // will need to grab ugg_id (for this user's entry) from newly created goal and add it to each marker
             // should then send fetch request to create markers on backend
-            
+            // if multi-user, send patch request to user_group_goals to create second record
             const reqObj = {
                 method: 'POST',
                 headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
@@ -123,13 +125,31 @@ class GoalForm extends React.Component{
                 })
             }
 
-            // fetch('http://localhost:3000/goals', reqObj)
-            //     .then(response => console.log(response.json()))
-
+            fetch('http://localhost:3000/goals', reqObj)
+            .then(response => response.json())
+            .then(data => {
+                console.log(newMarkers)
+                Promise.all(newMarkers.map(marker => {
+                    delete marker['status']
+                    marker['user_group_goal_id'] = data.user_group_goals[0].id
+                    
+                    fetch('http://localhost:3000/markers', {
+                        method: 'POST', 
+                        headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
+                        body: JSON.stringify(marker)
+                    })
+                    .then(response => response.json())
+                    .then(marker =>{
+                        // this.props.addGoal(data)
+                        this.props.filteringGoal(data)
+                        this.props.current.markers.push(marker)
+                        this.props.history.push(`/dashboard/goals/view/${this.props.current.id}`)
+                    })
+                    }))
+            })
+            
+            
         } else if (event.target.name === 'Update'){
-            // fetch to update existing goal
-            // should also send fetch request to update existing markers 
-            // but only if there's been a change to their information
                 const reqObj = {
                     method: 'PATCH',
                     headers:{'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
@@ -187,6 +207,7 @@ class GoalForm extends React.Component{
     }
 
     render(){
+        console.log(this.state)
         return (
             <div>
                 <h2>Goal Form</h2>
@@ -202,7 +223,9 @@ class GoalForm extends React.Component{
                         </div>)
                     })}
                     <button onClick={this.newMarker}>Add Marker</button>
-                    <button type='submit'>{this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'}</button>
+                    {this.state.markers.length > 0  && this.state.markers[0].title !== '' ? 
+                    <button type='submit'>{this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'}</button> :
+                    null}
                 </form>
             </div>
             )
