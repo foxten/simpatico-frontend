@@ -68,6 +68,7 @@ class GoalForm extends React.Component{
     }
 
     handleChecks = event =>{
+        // refactor
         if(event.target.name === 'multi_user'){
             this.setState({
                 multi_user: !this.state.multi_user
@@ -215,6 +216,14 @@ class GoalForm extends React.Component{
                     <input type='text' placeholder='Goal' name='title' onChange={this.handleInput} value={this.state.title}></input><br/>
                     <input type='date' name='deadline' onChange={this.handleInput} value={this.state.deadline}></input><br/>
                     <label>Multi-User?</label><input type='checkbox' name='multi_user' onChange={this.handleChecks} checked={this.state.multi_user}></input><br/>
+                    
+                    {this.state.multi_user === true ? 
+                        <div><select>
+                        {this.props.friends.map(friend => {
+                            return <option value={friend.id}>{friend.first_name}</option>
+                        })}
+                        </select></div> : null }
+                    
                     <label>Private?</label><input type='checkbox' name='publicly_viewable' onChange={this.handleChecks} checked={!this.state.publicly_viewable}></input><br/>
                     {this.state.markers.map((marker, index) =>{
                         return (<div key={index}>
@@ -233,7 +242,7 @@ class GoalForm extends React.Component{
 }
 
 const mapStateToProps = (state) =>{
-    return { current: state.currentGoal, userId: state.login.id }
+    return { current: state.currentGoal, userId: state.login.id, friends: state.friends }
 }
 
 const mapDispatchToProps = {
