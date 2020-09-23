@@ -131,7 +131,7 @@ class GoalForm extends React.Component{
                 console.log(newMarkers)
                 Promise.all(newMarkers.map(marker => {
                     delete marker['status']
-                    marker['user_group_goal_id'] = data.user_group_goals[0].id
+                    marker['user_group_goal_id'] = data.goal[0].ugg_id
                     
                     fetch('http://localhost:3000/markers', {
                         method: 'POST', 
@@ -140,8 +140,8 @@ class GoalForm extends React.Component{
                     })
                     .then(response => response.json())
                     .then(marker =>{
-                        // this.props.addGoal(data)
-                        this.props.filteringGoal(data)
+                        this.props.addGoal(data.goal[0])
+                        this.props.filteringGoal(data.goal[0])
                         this.props.current.markers.push(marker)
                         this.props.history.push(`/dashboard/goals/view/${this.props.current.id}`)
                     })
