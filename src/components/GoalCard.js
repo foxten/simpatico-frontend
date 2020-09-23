@@ -1,8 +1,9 @@
 import React from 'react';
 import ProgressBar from './ProgressBar';
-import { Switch, Link, Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { filteringGoal } from '../actions/currentGoal'
+
 
 const GoalCard = (props) =>{
     const { goalInfo } = props

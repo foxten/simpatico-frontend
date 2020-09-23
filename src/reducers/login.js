@@ -4,8 +4,7 @@ export default function login (state=null, action){
             case 'SIGNING_UP':
              case 'CURRENT_USER':
             return action.user;
-        case 'LOGGING_OUT':
-            return null
+       
         default:
             return state
     }

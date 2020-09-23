@@ -4,7 +4,9 @@ export default function goals (state=[], action){
     switch(action.type){
         case 'LIST_FRIENDS':
             return action.friends;
-
+            
+        default:
+            return state
         // case 'ADD_GOAL':
         //     return [...state, action.goal];
 
@@ -16,7 +18,5 @@ export default function goals (state=[], action){
         // case 'DELETE_GOAL':
         //     return state.filter(goal => goal.ugg_id !== action.goalId)
 
-        default:
-            return state
     }
 }

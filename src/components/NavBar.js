@@ -34,7 +34,7 @@ const NavBar = (props) =>{
 }
 
 const mapStateToProps = (state) =>{
-    return {user: state.login}
+    return {user: state.login, goals: state.goals, friends: state.friends}
 }
 
 const mapDispatchToProps = {

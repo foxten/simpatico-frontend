@@ -1,3 +1,6 @@
+import { LOGGING_OUT } from "./actionTypes";
+ 
+
 export const loggedIn = (user) =>{
     return {
         type: 'LOGGING_IN',
@@ -21,6 +24,6 @@ export const signingUp = (user) => {
 
 export const loggingOut = () =>{
     return {
-        type: 'LOGGING_OUT',
+        type: LOGGING_OUT,
     }
 }

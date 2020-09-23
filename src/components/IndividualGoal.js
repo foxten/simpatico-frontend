@@ -4,7 +4,7 @@ import ProgressBar from './ProgressBar';
 import Markers from '../containers/Markers';
 import { deleteGoal } from '../actions/goals'
 
-// figure out a way to put currentGoal in state
+// FETCH REQUEST - DELETE
 
 
 const IndividualGoal = (props) =>{
@@ -45,7 +45,7 @@ const IndividualGoal = (props) =>{
 }
 
 const mapStateToProps = (state) =>{
-    return { goal: state.currentGoal}
+    return { goal: state.currentGoal }
 }
 
 const mapDispatchToProps = {
