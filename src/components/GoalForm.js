@@ -12,10 +12,9 @@ class GoalForm extends React.Component{
            editMode: false,
            title: "",
            multi_user: false, 
-           markerChange: false,
            publicly_viewable: false, 
            deadline: "",
-           friend: "",
+           friend: [],
            markers: []
        }   
    }
@@ -24,16 +23,14 @@ class GoalForm extends React.Component{
        if(this.props.location.pathname.includes('/dashboard/goals/edit/')){
         const { goal, comp, markers } = this.props.current
         const { title, multi_user, publicly_viewable, deadline } = goal
-        let friend_info =  comp.length > 0 ? comp[0].first_name : ""
 
             this.setState({ 
             editMode: !this.state.editMode,
             title: title,
             multi_user: multi_user,
-            markerChange: false,
             publicly_viewable: publicly_viewable,
             deadline: deadline, 
-            friend: friend_info,
+            friend: comp,
             markers: markers
         })}
     }
@@ -44,10 +41,9 @@ class GoalForm extends React.Component{
                 editMode: false,
                 title: "",
                 multi_user: false, 
-                markerChange: false,
                 publicly_viewable: false, 
                 deadline: "",
-                friend: "",
+                friend: [],
                 markers: []
             })
         }
@@ -61,8 +57,7 @@ class GoalForm extends React.Component{
             let markers = [...this.state.markers]
             markers[event.target.dataset.id][event.target.name] = event.target.value
             this.setState({
-                markers,
-                markerChange: !this.state.markerChange
+                markers
             })
         }
     }
@@ -71,11 +66,17 @@ class GoalForm extends React.Component{
         // refactor
         if(event.target.name === 'multi_user'){
             this.setState({
-                multi_user: !this.state.multi_user
+                multi_user: !this.state.multi_user,
+                friend: [{id: '', status: 'new'}]
             })
         }else if (event.target.name === 'publicly_viewable'){
             this.setState({
                 publicly_viewable: !this.state.publicly_viewable
+            })
+        }else if (event.target.name === 'friend') {
+            console.log(event.target.value)
+            this.setState({
+                friend: [...this.state.friend, {id: event.target.value, status: 'new'}].filter(friend => friend.id !== '')
             })
         }else if (event.target.name === 'accomplished'){
             let markers = [...this.state.markers]
@@ -86,15 +87,15 @@ class GoalForm extends React.Component{
         }
     }
 
-    newMarker = (event) =>{
+    newField = (event) =>{
         event.preventDefault()
-        if(this.props.location.pathname.includes('/dashboard/goals/edit/')){
-            this.setState({
-                markers: [...this.state.markers, {title: '', notes: '', accomplished: false, user_group_goal_id: this.props.current.ugg_id, status: 'new'}]
-            })
-        } else {
+        if(event.target.name === 'newMarker'){
             this.setState({
                 markers: [...this.state.markers, {title: '', notes: '', accomplished: false, status: 'new'}]
+            })
+        } else if (event.target.name === 'newFriend'){
+            this.setState({
+                friend: [...this.state.friend, {id: '', status: 'new'}]
             })
         }
     }
@@ -104,7 +105,8 @@ class GoalForm extends React.Component{
         const token = localStorage.getItem('userToken')
         let newMarkers = this.state.markers.filter(marker => marker.status === 'new' && marker.title !== '')
         let existingMarkers = this.state.markers.filter(marker => marker.status !== 'new')
-
+        let newFriends = this.state.friend.filter(friend => friend.status === 'new' && friend.id !== '' )
+        // let existingFriends = this.state.friend.filter(friend => friend.status !== 'new')
 
         if(event.target.name === 'Submit'){
             delete this.state['editMode']
@@ -130,7 +132,9 @@ class GoalForm extends React.Component{
             .then(response => response.json())
             .then(data => {
                 console.log(newMarkers)
-                Promise.all(newMarkers.map(marker => {
+                this.props.addGoal(data.goal[0])
+                this.props.filteringGoal(data.goal[0])
+                Promise.all((newMarkers.map(marker => {
                     delete marker['status']
                     marker['user_group_goal_id'] = data.goal[0].ugg_id
                     
@@ -141,13 +145,32 @@ class GoalForm extends React.Component{
                     })
                     .then(response => response.json())
                     .then(marker =>{
-                        this.props.addGoal(data.goal[0])
-                        this.props.filteringGoal(data.goal[0])
+                        // this.props.addGoal(data.goal[0])
+                        // this.props.filteringGoal(data.goal[0])
                         this.props.current.markers.push(marker)
-                        this.props.history.push(`/dashboard/goals/view/${this.props.current.id}`)
+                        this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
                     })
-                    }))
-            })
+                })),
+                   
+                newFriends.map(friend =>{
+                    const reqObj = {
+                        method: 'POST',
+                        headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
+                        body: JSON.stringify({user_id: friend.id, goal_id: data.goal.id})
+                    }
+    
+                    fetch('http://localhost:3000/user_group_goals', reqObj)
+                        .then(response => response.json())
+                            .then(friendInfo =>{
+                                console.log(friendInfo)
+                                this.props.current.comp.push(friendInfo.user)
+                                this.props.editGoal(this.props.current)
+                            }
+                    )
+                })
+            )
+
+        })
             
             
         } else if (event.target.name === 'Update'){
@@ -162,50 +185,69 @@ class GoalForm extends React.Component{
                 }
 
             fetch(`http://localhost:3000/goals/${this.props.current.goal.id}`, reqObj)
-                .then(response => console.log(response.json()))
+                .then(response => response.json())
+                    .then(updatedGoal => {
+                        let newCurrent = updatedGoal.goal.filter(solo => solo.ugg_id === this.props.current.ugg_id)[0]
+                        // this.props.filteringGoal(newCurrent)
+                        // this.props.editGoal(newCurrent)
+                        if(this.state.editMode === true){
 
-            if(this.state.markerChange === true){
-                
-                Promise.all((newMarkers.map(marker => {
-                    delete marker['status']
-                    const reqObj = {
-                        method: 'POST',
-                        headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
-                        body: JSON.stringify(marker)
-                    }
+                            Promise.all((newMarkers.map(marker => {
+                                delete marker['status']
+                                marker['user_group_goal_id'] = this.props.current.ugg_id
+
+                                const reqObj = {
+                                    method: 'POST',
+                                    headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
+                                    body: JSON.stringify(marker)
+                                }
+                                
+                                fetch('http://localhost:3000/markers', reqObj)
+                                    .then(response => response.json())
+                                        .then(marker => {
+                                            this.props.current.markers.push(marker)   
+                                            this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                        }) 
+                            })),
+                                existingMarkers.map(markerData =>{
+                                    const idInfo = markerData.id
+                                    delete markerData['id']
+                                    delete markerData['created_at']
+                                    delete markerData['updated_at']
+                                    const reqObj = {
+                                        method: 'PATCH',
+                                        headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
+                                        body: JSON.stringify(markerData)
+                                    }
+
+                                    fetch(`http://localhost:3000/markers/${idInfo}`, reqObj)
+                                        .then(response => response.json())
+                                        .then(
+                                            this.props.editGoal(this.props.current),
+                                            this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                        )
+                                }),
+                                newFriends.map(friend =>{
+                                    const reqObj = {
+                                        method: 'POST',
+                                        headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
+                                        body: JSON.stringify({user_id: friend.id, goal_id: this.props.current.goal.id})
+                                    }
                     
-                    fetch('http://localhost:3000/markers', reqObj)
-                        .then(response => response.json)
-                            .then(
-                                this.setState({markerChange: !this.state.markerChange}),
-                                this.props.editGoal(this.props.current),
-                                this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
-                            ) 
-                })),
-                    existingMarkers.map(markerData =>{
-                        const idInfo = markerData.id
-                        delete markerData['id']
-                        delete markerData['created_at']
-                        delete markerData['updated_at']
-                        const reqObj = {
-                            method: 'PATCH',
-                            headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
-                            body: JSON.stringify(markerData)
-                        }
+                                    fetch('http://localhost:3000/user_group_goals', reqObj)
+                                        .then(response => response.json())
+                                            .then(friendInfo =>{
+                                                this.props.current.comp.push(friendInfo.user)
+                                                this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                         })
+                                })
+                        )}
+                        this.props.editGoal(newCurrent)
 
-                        fetch(`http://localhost:3000/markers/${idInfo}`, reqObj)
-                            .then(response => response.json)
-                            .then(
-                                this.setState({markerChange: !this.state.markerChange}),
-                                this.props.editGoal(this.props.current),
-                                this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
-                            ) 
-                    })
-                )
-            }
+                })
+        } 
+ }
         
-        }
-    }
 
     render(){
         console.log(this.state)
@@ -218,11 +260,12 @@ class GoalForm extends React.Component{
                     <label>Multi-User?</label><input type='checkbox' name='multi_user' onChange={this.handleChecks} checked={this.state.multi_user}></input><br/>
                     
                     {this.state.multi_user === true ? 
-                        <div><select>
-                        {this.props.friends.map(friend => {
-                            return <option value={friend.id}>{friend.first_name}</option>
-                        })}
-                        </select></div> : null }
+                        this.state.friend.map((friend, index) => {
+                            return <div key={index}><select name='friend' value={friend.id} onChange={this.handleChecks}>
+                                {this.props.friends.map((friendLI, index) => {
+                                    return <option key={index} value={friendLI.id}>{friendLI.first_name}</option>})}
+                                    </select></div>
+                                }): null}
                     
                     <label>Private?</label><input type='checkbox' name='publicly_viewable' onChange={this.handleChecks} checked={!this.state.publicly_viewable}></input><br/>
                     {this.state.markers.map((marker, index) =>{
@@ -231,7 +274,9 @@ class GoalForm extends React.Component{
                             {marker.accomplished === true ? <label>{marker.title}</label> : <input type='text' className='marker' name='title' data-id={index} onChange={this.handleInput} value={marker.title}></input>}
                         </div>)
                     })}
-                    <button onClick={this.newMarker}>Add Marker</button>
+                    <button name= 'newMarker' onClick={this.newField}>Add Marker</button>
+                    <button name= 'newFriend' onClick={this.newField}>Add Friend</button>
+                   
                     {this.state.markers.length > 0  && this.state.markers[0].title !== '' ? 
                     <button type='submit'>{this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'}</button> :
                     null}

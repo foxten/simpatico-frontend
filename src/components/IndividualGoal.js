@@ -12,7 +12,7 @@ const IndividualGoal = (props) =>{
     const { id } = props.match.params
     // const currentGoal = props.goals.find(element => element.goal.id !== id)
     const { markers } = props.current
-    const status = markers.filter(marker => marker.accomplished === true).length / markers.length
+    const status = (markers.filter(marker => marker.accomplished === true).length / markers.length) * 100
 
     // console.log(currentGoal.ugg_id)
     console.log(props)
@@ -26,8 +26,8 @@ const IndividualGoal = (props) =>{
                 .then(response => response.json())
                     .then(
                         props.deleteGoal(props.current.ugg_id),
+                        )
                         props.history.push('/dashboard/goals')
-                    )
             // alert('Are you sure you want to delete this goal?')
             // modal
         } else {

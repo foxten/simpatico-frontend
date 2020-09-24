@@ -17,7 +17,7 @@ function App(props) {
   console.log(props)
   return (
     <div className="App">
-      <header>YOU'RE HERE</header>
+      <header>Simpatico</header>
       <NavBar info={props}/>
         <Switch>
           <Route path="/login" component={Login}/>

@@ -10,7 +10,7 @@ const GoalCard = (props) =>{
     const {goal, comp, markers} = goalInfo
     // console.log(goalInfo)
 
-    const status = markers.filter(marker => marker.accomplished === true).length / markers.length
+    const status = ((markers.filter(marker => marker.accomplished === true).length) / markers.length) * 100
 
     const handleClick = (event) =>{
         props.filteringGoal(goalInfo)
@@ -20,7 +20,9 @@ const GoalCard = (props) =>{
         <div>GoalCard Here
             <h2>Goal: {goal.title}</h2>
             { goal.multi_user ? 
-            <h2>Type: Shared w/ {comp[0].first_name}</h2>
+               <h2>Type: Shared | {comp.map((friend, index) => {
+                    return `${friend.first_name} | `
+                })} </h2>
             :
             <h2>Type: Personal</h2>
             }

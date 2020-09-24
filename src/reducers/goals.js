@@ -9,7 +9,7 @@ export default function goals (state=[], action){
             return [...state, action.goal];
 
         case 'EDIT_GOAL':
-            index = state.findIndex(goal => goal.ugg_id === action.goal.id);
+            index = state.findIndex(goal => goal.ugg_id === action.goal.ugg_id);
             state.splice(index, 1, action.goal)
             return state;
 
