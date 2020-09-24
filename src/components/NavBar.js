@@ -1,6 +1,8 @@
 import React from 'react';
 import { loggingOut } from '../actions/login';
 import { connect } from 'react-redux';
+import { Button } from 'react-bootstrap'
+
 
 
 
@@ -22,11 +24,11 @@ const NavBar = (props) =>{
     return (
         <div>
             {props.user !== null ?
-            <button name="logout" onClick={handleClick}>Logout</button>
+            <Button variant="outline-secondary" name="logout" onClick={handleClick}>Logout</Button>
             :
             <div>
-            <button name="login" onClick={handleClick}>Log In</button>
-            <button name="signup" onClick={handleClick}>Sign Up</button>
+            <Button variant="outline-secondary"  name="login" onClick={handleClick}>Log In</Button>
+            <Button variant="outline-secondary"  name="signup" onClick={handleClick}>Sign Up</Button>
             </div>
             }
         </div>

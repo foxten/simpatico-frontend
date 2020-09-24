@@ -188,14 +188,14 @@ class GoalForm extends React.Component{
                 .then(response => response.json())
                     .then(updatedGoal => {
                         let newCurrent = updatedGoal.goal.filter(solo => solo.ugg_id === this.props.current.ugg_id)[0]
-                        // this.props.filteringGoal(newCurrent)
-                        // this.props.editGoal(newCurrent)
-                        if(this.state.editMode === true){
+                        console.log(newCurrent)
 
-                            Promise.all((newMarkers.map(marker => {
+                        this.props.filteringGoal(newCurrent)
+                            if(this.state.editMode === true){
+                                Promise.all((newMarkers.map(marker => {
                                 delete marker['status']
                                 marker['user_group_goal_id'] = this.props.current.ugg_id
-
+                                
                                 const reqObj = {
                                     method: 'POST',
                                     headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
@@ -203,29 +203,29 @@ class GoalForm extends React.Component{
                                 }
                                 
                                 fetch('http://localhost:3000/markers', reqObj)
-                                    .then(response => response.json())
-                                        .then(marker => {
-                                            this.props.current.markers.push(marker)   
-                                            this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
-                                        }) 
+                                .then(response => response.json())
+                                .then(marker => {
+                                    this.props.current.markers.push(marker)
+                                    this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                }) 
                             })),
                                 existingMarkers.map(markerData =>{
-                                    const idInfo = markerData.id
-                                    delete markerData['id']
-                                    delete markerData['created_at']
-                                    delete markerData['updated_at']
-                                    const reqObj = {
-                                        method: 'PATCH',
-                                        headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
-                                        body: JSON.stringify(markerData)
-                                    }
-
-                                    fetch(`http://localhost:3000/markers/${idInfo}`, reqObj)
-                                        .then(response => response.json())
-                                        .then(
-                                            this.props.editGoal(this.props.current),
-                                            this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
-                                        )
+                                const idInfo = markerData.id
+                                delete markerData['id']
+                                delete markerData['created_at']
+                                delete markerData['updated_at']
+                                const reqObj = {
+                                    method: 'PATCH',
+                                    headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
+                                    body: JSON.stringify(markerData)
+                                }
+                                
+                                fetch(`http://localhost:3000/markers/${idInfo}`, reqObj)
+                                .then(response => response.json())
+                                .then(
+                                    this.props.editGoal(this.props.current),
+                                    this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                    )
                                 }),
                                 newFriends.map(friend =>{
                                     const reqObj = {
@@ -233,20 +233,22 @@ class GoalForm extends React.Component{
                                         headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
                                         body: JSON.stringify({user_id: friend.id, goal_id: this.props.current.goal.id})
                                     }
-                    
+                                    
                                     fetch('http://localhost:3000/user_group_goals', reqObj)
-                                        .then(response => response.json())
-                                            .then(friendInfo =>{
-                                                this.props.current.comp.push(friendInfo.user)
-                                                this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
-                                         })
-                                })
-                        )}
-                        this.props.editGoal(newCurrent)
+                                    .then(response => response.json())
+                                    .then(friendInfo =>{
+                                        this.props.current.comp.push(friendInfo.user)
+                                        this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                    })
+                                }),
+                            )} else {
+                                this.props.editGoal(newCurrent)
+                            }
 
-                })
+                        console.log(this.props.current)
+                    })
         } 
- }
+    }
         
 
     render(){

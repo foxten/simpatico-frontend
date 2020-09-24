@@ -4,10 +4,12 @@ import { grabbingGoals } from '../actions/goals';
 import { listingFriends } from '../actions/friends';
 import { connect } from 'react-redux';
 import {Route, Switch } from 'react-router-dom'
+import { Button } from 'react-bootstrap';
 import Goals from '../containers/Goals'
 import Friends from '../containers/Friends'
 import IndividualGoal from '../components/IndividualGoal'
 import GoalForm from '../components/GoalForm'
+import AddFriend from '../components/AddFriend'
 
 
 
@@ -48,15 +50,16 @@ class Dashboard extends React.Component{
         return(
             // some div with user avatar
             <div>
-                <button name="goals" onClick={this.handleClick}>Goals</button>
-                <button name="friends" onClick={this.handleClick}>Friends</button>
-                <button name="new goal" onClick={this.handleClick}>New Goal</button>
+                <Button variant="outline-secondary" name="goals" onClick={this.handleClick}>Goals</Button>
+                <Button variant="outline-secondary" name="friends" onClick={this.handleClick}>Friends</Button>
+                <Button variant="outline-secondary" name="new goal" onClick={this.handleClick}>New Goal</Button>
             <Switch>
                 <Route path="/dashboard/goals/view/:id" component={IndividualGoal}/>
                 <Route path="/dashboard/goals/edit/:id" component={GoalForm}/>
                 <Route path="/dashboard/goals" component={Goals}/>
                 <Route path="/dashboard/friends" component={Friends}/>
                 <Route path="/dashboard/new_goal" component={GoalForm}/>
+                <Route path="/dashboard/new_friend" component={AddFriend}/>
             </Switch>
             </div>
         )

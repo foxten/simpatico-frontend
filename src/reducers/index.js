@@ -11,7 +11,7 @@ import { LOGGING_OUT } from '../actions/actionTypes';
   login: login,
   goals: goals,
   friends: friends,
-  currentGoal: currentGoal
+  currentGoal: currentGoal,
 });
 
 const indexReducer = (state, action) => {

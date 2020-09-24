@@ -1,4 +1,4 @@
-export default function goals (state=[], action){
+export default function friends (state=[], action){
     // let index; 
 
     switch(action.type){
