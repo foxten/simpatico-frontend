@@ -1,7 +1,7 @@
 import React from 'react';
 import Avatar from 'react-avatar';
 import { connect } from 'react-redux';
-import { Card, Button } from 'react-bootstrap';
+import { Col, Card, Button } from 'react-bootstrap';
 
 // when add friend is clicked
 // a friend_request should be created on the backend
@@ -18,15 +18,17 @@ const FriendCard = (props) =>{
     }
 
     return (
+        <Col>
         <Card>
         <Card.Body>
-        <Avatar name="Tenaysia Fox" round={true} />
+        <Avatar name={(props.info.first_name)} size={150} round={true} />
         <h2>{props.info.first_name}{props.info.last_initial}</h2>
         {props.location.pathname === '/dashboard/new_friend' ?  
             <Button id={props.info.id} variant="outline-dark" sz='sm' onClick={handleClick}>Add Friend</Button>
             : null}        
             </Card.Body>
         </Card>
+        </Col>
     )
 }
 

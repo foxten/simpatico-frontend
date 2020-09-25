@@ -27,7 +27,7 @@ const GoalCard = (props) =>{
             <h2>Type: Personal</h2>
             }
             <h2>Deadline: {new Date(`${goal.deadline} 00:00:00`).toDateString()}</h2>
-            <ProgressBar completed={status} bgcolor={"#6a1b9a"}/>
+             <ProgressBar completed={markers.length > 0 ? status : "Add markers to track progress"} bgcolor={"#6a1b9a"}/>
             <Link to={`/dashboard/goals/view/${goal.id}`} onClick={handleClick}>View Goal</Link>
 
         </div>

@@ -4,12 +4,14 @@ import { grabbingGoals } from '../actions/goals';
 import { listingFriends } from '../actions/friends';
 import { connect } from 'react-redux';
 import {Route, Switch } from 'react-router-dom'
-import { Button } from 'react-bootstrap';
+import { Button, Jumbotron } from 'react-bootstrap';
 import Goals from '../containers/Goals'
 import Friends from '../containers/Friends'
 import IndividualGoal from '../components/IndividualGoal'
 import GoalForm from '../components/GoalForm'
 import AddFriend from '../components/AddFriend'
+import Avatar from 'react-avatar';
+
 
 
 
@@ -46,9 +48,12 @@ class Dashboard extends React.Component{
     }
 
     render(){
-        // console.log(this.props.user)
+        console.log(this.props.user)
         return(
-            // some div with user avatar
+            <div>
+                <div>
+                    {/* <Avatar name={this.props.user.first_name} size={100} round={true} /> */}
+                </div>
             <div>
                 <Button variant="outline-secondary" name="goals" onClick={this.handleClick}>Goals</Button>
                 <Button variant="outline-secondary" name="friends" onClick={this.handleClick}>Friends</Button>
@@ -62,6 +67,11 @@ class Dashboard extends React.Component{
                 <Route path="/dashboard/new_friend" component={AddFriend}/>
             </Switch>
             </div>
+{/* 
+            <Jumbotron>
+            <h2>Hello</h2>
+            </Jumbotron> */}
+        </div>
         )
     }
 }

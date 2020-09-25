@@ -31,7 +31,7 @@ class GoalForm extends React.Component{
             publicly_viewable: publicly_viewable,
             deadline: deadline, 
             friend: comp,
-            markers: markers
+            markers: markers.sort(function(a, b){return a.id - b.id})
         })}
     }
 
@@ -74,7 +74,7 @@ class GoalForm extends React.Component{
                 publicly_viewable: !this.state.publicly_viewable
             })
         }else if (event.target.name === 'friend') {
-            console.log(event.target.value)
+            console.log(event.target.value, event.target.name)
             this.setState({
                 friend: [...this.state.friend, {id: event.target.value, status: 'new'}].filter(friend => friend.id !== '')
             })
@@ -222,10 +222,12 @@ class GoalForm extends React.Component{
                                 
                                 fetch(`http://localhost:3000/markers/${idInfo}`, reqObj)
                                 .then(response => response.json())
-                                .then(
-                                    this.props.editGoal(this.props.current),
+                                .then(updatedMarker =>{
+                                    let idx = this.props.current.markers.findIndex(mar => mar.id === updatedMarker.id)
+                                    this.props.current.markers.splice(idx, 1, updatedMarker)
+                                    this.props.editGoal(this.props.current)
                                     this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
-                                    )
+                                    })
                                 }),
                                 newFriends.map(friend =>{
                                     const reqObj = {
@@ -237,12 +239,16 @@ class GoalForm extends React.Component{
                                     fetch('http://localhost:3000/user_group_goals', reqObj)
                                     .then(response => response.json())
                                     .then(friendInfo =>{
-                                        this.props.current.comp.push(friendInfo.user)
-                                        this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                        if(friendInfo.message){
+                                            console.log(friendInfo.message)
+                                        } else {
+                                            this.props.current.comp.push(friendInfo.user)
+                                            this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
+                                        }
                                     })
                                 }),
                             )} else {
-                                this.props.editGoal(newCurrent)
+                                this.props.editGoal(this.props.current)
                             }
 
                         console.log(this.props.current)
@@ -252,7 +258,8 @@ class GoalForm extends React.Component{
         
 
     render(){
-        console.log(this.state)
+        console.log(this.state.friend)
+
         return (
             <div>
                 <h2>Goal Form</h2>
@@ -264,6 +271,7 @@ class GoalForm extends React.Component{
                     {this.state.multi_user === true ? 
                         this.state.friend.map((friend, index) => {
                             return <div key={index}><select name='friend' value={friend.id} onChange={this.handleChecks}>
+                                <option> -- select an option -- </option>
                                 {this.props.friends.map((friendLI, index) => {
                                     return <option key={index} value={friendLI.id}>{friendLI.first_name}</option>})}
                                     </select></div>

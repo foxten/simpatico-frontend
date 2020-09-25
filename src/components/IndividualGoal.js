@@ -41,9 +41,9 @@ const IndividualGoal = (props) =>{
             <h2>Goal</h2>
             <h2>Type</h2>
             <h2>Deadline</h2>
-            <h2>Status: </h2><ProgressBar completed={status} bgcolor={"#6a1b9a"}/>
+            <h2>Status: </h2><ProgressBar completed={markers.length > 0 ? status : "Add markers to track progress"} bgcolor={"#6a1b9a"}/>
             <h2>Benchmarks:</h2>
-             <Markers markers={markers}/>
+             <Markers markers={markers.sort(function(a, b){return a.id - b.id})}/>
             <button name='remove goal' onClick={handleClick}>Remove Goal</button>
             <button name='edit goal' onClick={handleClick}>Edit Goal</button>
             </div>
