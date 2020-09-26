@@ -206,6 +206,7 @@ class GoalForm extends React.Component{
                                 .then(response => response.json())
                                 .then(marker => {
                                     this.props.current.markers.push(marker)
+                                    this.props.editGoal(this.props.current)
                                     this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
                                 }) 
                             })),
@@ -243,6 +244,7 @@ class GoalForm extends React.Component{
                                             console.log(friendInfo.message)
                                         } else {
                                             this.props.current.comp.push(friendInfo.user)
+                                            this.props.editGoal(this.props.current)
                                             this.props.history.push(`/dashboard/goals/view/${this.props.current.goal.id}`)
                                         }
                                     })

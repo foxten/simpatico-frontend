@@ -5,12 +5,12 @@ export const listingFriends = (friends) =>{
     }
 }
 
-// export const addGoal = (goal) =>{
-//     return {
-//         type: 'ADD_GOAL',
-//         goal
-//     }
-// }
+export const addFriend = (friend) =>{
+    return {
+        type: 'ADD_FRIEND',
+        friend
+    }
+}
 
 // export const editGoal = (goal) =>{
 //     return {

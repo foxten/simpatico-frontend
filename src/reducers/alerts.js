@@ -1,15 +1,14 @@
-export default function friends (state=[], action){
+export default function alerts (state=[], action){
     // let index; 
 
     switch(action.type){
-        case 'LIST_FRIENDS':
-            return action.friends;
+        case 'GRABBING_ALERTS':
+            return action.alerts;
             
-        case 'ADD_FRIEND':
-            return [...state, action.friend];
-
         default:
             return state
+        // case 'ADD_GOAL':
+        //     return [...state, action.goal];
 
         // case 'EDIT_GOAL':
         //     index = state.findIndex(goal => goal.ugg_id === action.goal.id);

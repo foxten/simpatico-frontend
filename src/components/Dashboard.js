@@ -2,14 +2,16 @@ import React from 'react';
 import { currentUser } from '../actions/login';
 import { grabbingGoals } from '../actions/goals';
 import { listingFriends } from '../actions/friends';
+import { grabbingAlerts } from '../actions/alerts';
 import { connect } from 'react-redux';
 import {Route, Switch } from 'react-router-dom'
 import { Button, Jumbotron } from 'react-bootstrap';
 import Goals from '../containers/Goals'
 import Friends from '../containers/Friends'
-import IndividualGoal from '../components/IndividualGoal'
-import GoalForm from '../components/GoalForm'
-import AddFriend from '../components/AddFriend'
+import Alerts from '../containers/Alerts'
+import IndividualGoal from './IndividualGoal'
+import GoalForm from './GoalForm'
+import AddFriend from './AddFriend'
 import Avatar from 'react-avatar';
 
 
@@ -33,6 +35,7 @@ class Dashboard extends React.Component{
                         this.props.currentUser(userInfo.user)
                         this.props.grabbingGoals(userInfo.user.mygoals)
                         this.props.listingFriends(userInfo.user.friends)
+                        this.props.grabbingAlerts(userInfo.user.alerts)
                     })
             }
     }
@@ -46,13 +49,14 @@ class Dashboard extends React.Component{
             this.props.history.push('/dashboard/new_goal')
         }
     }
-
+    
     render(){
         console.log(this.props.user)
         return(
             <div>
                 <div>
                     {/* <Avatar name={this.props.user.first_name} size={100} round={true} /> */}
+                    <Alerts />
                 </div>
             <div>
                 <Button variant="outline-secondary" name="goals" onClick={this.handleClick}>Goals</Button>
@@ -67,27 +71,25 @@ class Dashboard extends React.Component{
                 <Route path="/dashboard/new_friend" component={AddFriend}/>
             </Switch>
             </div>
-{/* 
-            <Jumbotron>
-            <h2>Hello</h2>
-            </Jumbotron> */}
         </div>
         )
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        user: state.login,
-        goals: state.goals,
-        friends: state.friends
-    }
-}
+// const mapStateToProps = (state) => {
+//     return {
+//         user: state.login,
+//         goals: state.goals,
+//         friends: state.friends,
+//         alerts: state.alerts
+//     }
+// }
 
 const mapDispatchToProps = {
     currentUser,
     grabbingGoals,
-    listingFriends
+    listingFriends,
+    grabbingAlerts
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)
+export default connect(null, mapDispatchToProps)(Dashboard)
