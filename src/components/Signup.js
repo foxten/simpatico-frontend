@@ -1,6 +1,7 @@
 import React from 'react';
 import { signingUp } from '../actions/login';
 import { connect } from 'react-redux';
+import { Button, Form } from 'react-bootstrap';
 
 class Signup extends React.Component{
     constructor(){
@@ -10,7 +11,9 @@ class Signup extends React.Component{
             first_name: '',
             last_initial: '',
             password: '',
-            email_address:''
+            confirmed_password: '',
+            email_address:'', 
+            error: ''
         }
     }
 
@@ -22,6 +25,7 @@ class Signup extends React.Component{
 
     handleSubmit = event =>{
         event.preventDefault()
+        if(this.state.password === this.state.confirmedPassword){
         console.log(this.state)
         const reqObj = {
             method: 'POST',
@@ -42,29 +46,45 @@ class Signup extends React.Component{
                         this.props.history.push('/dashboard')
                     }
                 })
+    } else {
+        this.setState({
+            error: 'Please make sure passwords match.'
+        })
     }
+}
 
     render(){
         console.log(this.state)
         return (
             <div>
-                <h1>Simpatico</h1>
                 {this.state.error ? <h1>{this.state.error}</h1>: null}
-                <form onSubmit={this.handleSubmit}>
-                    {/* <Form.Group controlId="formUsername"> */}
-                    {/* <Form.Control name="username" type="text" placeholder="Enter username" onChange={this.handleInput} value={this.state.username}/>
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Group controlId="formUsername">
+                    <Form.Control name="username" type="text" placeholder="Enter username" onChange={this.handleInput} value={this.state.username}/>
                     </Form.Group>
+
+                    <Form.Group controlId="formFirstName">
+                    <Form.Control name="first_name" type="text" placeholder="Enter first name" onChange={this.handleInput} value={this.state.first_name}/>
+                    </Form.Group>
+
+                    <Form.Group controlId="formLastInitial">
+                    <Form.Control name="last_initial" type="text" placeholder="Enter last name initial" onChange={this.handleInput} value={this.state.last_initial}/>
+                    </Form.Group>
+
+                    <Form.Group controlId="formEmailAddress">
+                    <Form.Control name="email_address" type="text" placeholder="Enter email address" onChange={this.handleInput} value={this.state.email_address}/>
+                    </Form.Group>
+
                     <Form.Group controlId="formPassword">
                     <Form.Control name="password" type="password" placeholder="Enter password" onChange={this.handleInput} value={this.state.password}/>
-                    </Form.Group> */}
-                    <input name='username' placeholder='username' onChange={this.handleInput} value={this.state.username}></input>
-                    <input name='first_name' placeholder='first name' onChange={this.handleInput} value={this.state.first_name}></input>
-                    <input name='last_initial' placeholder='last name initial' onChange={this.handleInput} value={this.state.last_initial}></input>
-                    <input name='email_address' placeholder='email address' onChange={this.handleInput} value={this.state.email_address}></input>
-                    <input type='password' name='password' placeholder='password' onChange={this.handleInput} value={this.state.password}></input>
-                    <button type='submit'>Submit</button>
-                    {/* <Button variant="outline-dark" type="submit" size="lg">Log In</Button> */}
-                </form>
+                    </Form.Group>
+
+                    <Form.Group controlId="formConfirmPassword">
+                    <Form.Control type='password' name='confirmedPassword' placeholder='Confirm password' onChange={this.handleInput} value={this.state.confirmedPassword}/>
+                    </Form.Group>
+
+                    <Button variant="outline-dark" type="submit" size="lg">Sign Up</Button>
+                </Form>
             </div>
         )
     }

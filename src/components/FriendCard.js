@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Avatar from 'react-avatar';
 import { connect } from 'react-redux';
 import { Col, Card, Button } from 'react-bootstrap';
-
+import { newFriendRequest } from '../actions/friendRequests'
 // when add friend is clicked
 // a friend_request should be created on the backend
 // as well as a message to the recipient (user with id stored in button)
@@ -12,19 +12,26 @@ import { Col, Card, Button } from 'react-bootstrap';
 // if friend request exists between two users, button should be set to disabled on both ends
 
 const FriendCard = (props) =>{
-    const existingRequests = props.friend_requests.map(fr => fr.requestee_id && fr.requestor_id)
+
+    console.log(props.friendRequests)
+    const existingRequests = props.friendRequests.map(fr => fr.requestee_id).concat(props.friendRequests.map(fr => fr.requestor_id))
     
     const token = localStorage.getItem('userToken')
     const handleClick = event =>{
-        console.log(props)
-        debugger
-        // const reqObj = {
-        //     method: 'POST',
-        //     headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
-        //     body: JSON.stringify({requestor_id: props.user.id, requestee_id: event.target.id})
-        // }
-        // fetch('http://localhost:3000/friend_requests', reqObj)
-        // setDisabled(true)
+        const reqObj = {
+            method: 'POST',
+            headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
+            body: JSON.stringify({requestor_id: props.user.id, requestee_id: event.target.id})
+        }
+        fetch('http://localhost:3000/friend_requests', reqObj)
+            .then(response => response.json())
+                .then(friendRequest => {
+                    if (friendRequest.message){
+                        console.log(friendRequest.message)
+                    }else{
+                        props.newFriendRequest(friendRequest)
+                    }
+                })
     }
 
     return (
@@ -45,7 +52,11 @@ const FriendCard = (props) =>{
 
 
 const mapStateToProps = (state) =>{
-    return {friend_requests: state.login.friend_requests, user: state.login}
+    return {friendRequests: state.friendRequests, user: state.login}
 }
 
-export default connect(mapStateToProps,null)(FriendCard)
+const mapDispatchToProps = {
+    newFriendRequest
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(FriendCard)

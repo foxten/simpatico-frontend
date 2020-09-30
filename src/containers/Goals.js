@@ -19,7 +19,7 @@ const Goals = (props) =>{
     }
 
     return (
-        <div>CONTAINER
+        <div>
 
             <div>
                 <Link to='/dashboard/goals' name='all'>All</Link> | 

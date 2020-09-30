@@ -4,3 +4,10 @@ export const grabbingAlerts = (alerts) =>{
         alerts: alerts
     }
 }
+
+export const deleteAlert = (alertId)=>{
+    return {
+        type: 'DELETE_ALERT',
+        alertId
+    }
+}   

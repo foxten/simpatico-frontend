@@ -1,21 +1,17 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Button, ButtonGroup } from 'react-bootstrap'
 import ProgressBar from './ProgressBar';
 import Markers from '../containers/Markers';
 import { deleteGoal } from '../actions/goals'
 
 // FETCH REQUEST - DELETE
 
-
 const IndividualGoal = (props) =>{
     // debugger
     const { id } = props.match.params
-    // const currentGoal = props.goals.find(element => element.goal.id !== id)
-    const { markers } = props.current
+    const { goal, markers } = props.current
     const status = (markers.filter(marker => marker.accomplished === true).length / markers.length) * 100
-
-    // console.log(currentGoal.ugg_id)
-    console.log(props)
 
     const handleClick = event =>{
         const token = localStorage.getItem('userToken')
@@ -34,18 +30,20 @@ const IndividualGoal = (props) =>{
             props.history.push(`/dashboard/goals/edit/${id}`)
         }
     }
+    console.log(props)
 
     return (
-        <div>This will be a card with
-            Full Details for Single Goal
-            <h2>Goal</h2>
-            <h2>Type</h2>
-            <h2>Deadline</h2>
+        <div>
+            <h2>Goal: {goal.title}</h2>
+            <h2>Type: {goal.multi_user === false  ? 'Personal' : 'Shared'}</h2>
+            <h2>Deadline: {goal.deadline}</h2>
             <h2>Status: </h2><ProgressBar completed={markers.length > 0 ? status : "Add markers to track progress"} bgcolor={"#6a1b9a"}/>
             <h2>Benchmarks:</h2>
-             <Markers markers={markers.sort(function(a, b){return a.id - b.id})}/>
-            <button name='remove goal' onClick={handleClick}>Remove Goal</button>
-            <button name='edit goal' onClick={handleClick}>Edit Goal</button>
+            <Markers markers={markers.sort(function(a, b){return a.id - b.id})}/>
+            <ButtonGroup>
+            <Button variant="outline-secondary" name='remove goal' onClick={handleClick}>Remove Goal</Button>
+            <Button variant="outline-secondary" name='edit goal' onClick={handleClick}>Edit Goal</Button>
+            </ButtonGroup>
             </div>
     )
 }

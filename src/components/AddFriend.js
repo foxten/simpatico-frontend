@@ -40,18 +40,18 @@ class AddFriend extends React.Component {
         const filteredUsers = this.state.allUsers.filter(user => user.first_name.toLowerCase().includes(this.state.searchTerm.toLowerCase()))
 
         return (
-        <Container className="justify-content-md-center"> 
-            <Row sm={1}>
+        <div>
+             <Row className="justify-content-md-center">
                 <form>
                     <input type='text' name='searchTerm' value={this.state.searchTerm} onChange={this.handleSearch}></input>
                 </form>
             </Row>
-            <Row sm={3}>
-            {filteredUsers.map((user, index) =>
-                <FriendCard key={index} location={this.props.location} info={user}/>        
-                 )}
+            <Row sm={3}> 
+            {filteredUsers.map((user, index) =>{
+                return <FriendCard key={index} location={this.props.location} info={user}/>        
+                })}
             </Row>
-        </Container>
+        </div>
         )
     }
 }

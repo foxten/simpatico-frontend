@@ -3,9 +3,11 @@ import { currentUser } from '../actions/login';
 import { grabbingGoals } from '../actions/goals';
 import { listingFriends } from '../actions/friends';
 import { grabbingAlerts } from '../actions/alerts';
+import { grabbingFriendRequests } from '../actions/friendRequests'
 import { connect } from 'react-redux';
 import {Route, Switch } from 'react-router-dom'
-import { Button, Jumbotron } from 'react-bootstrap';
+import { Button, ButtonGroup, Container, OverlayTrigger, Popover, Row } from 'react-bootstrap';
+// import { Button, Container, OverlayTrigger, Popover, Row } from 'react-bootstrap';
 import Goals from '../containers/Goals'
 import Friends from '../containers/Friends'
 import Alerts from '../containers/Alerts'
@@ -13,7 +15,7 @@ import IndividualGoal from './IndividualGoal'
 import GoalForm from './GoalForm'
 import AddFriend from './AddFriend'
 import Avatar from 'react-avatar';
-
+import { Badge } from '@material-ui/core';
 
 
 
@@ -36,6 +38,7 @@ class Dashboard extends React.Component{
                         this.props.grabbingGoals(userInfo.user.mygoals)
                         this.props.listingFriends(userInfo.user.friends)
                         this.props.grabbingAlerts(userInfo.user.alerts)
+                        this.props.grabbingFriendRequests(userInfo.user.friend_requests)
                     })
             }
     }
@@ -49,47 +52,62 @@ class Dashboard extends React.Component{
             this.props.history.push('/dashboard/new_goal')
         }
     }
+
     
     render(){
+        const alertsPopover = (
+            <Popover bsPrefix='pushedPopover'>
+                <Popover.Title as="h3">Alerts</Popover.Title>
+                <Popover.Content>
+                <Alerts />
+                </Popover.Content>
+            </Popover>
+            )
+        
         console.log(this.props.user)
         return(
-            <div>
-                <div>
-                    {/* <Avatar name={this.props.user.first_name} size={100} round={true} /> */}
-                    <Alerts />
-                </div>
-            <div>
+            <Container className='otherComps'>
+                <Row className="justify-content-md-center" id="avatar">
+                <OverlayTrigger trigger='click' placement="right-end" overlay={alertsPopover}>
+                <Badge color="primary" overlap="circle" badgeContent={this.props.alerts.length}>
+                    <Avatar name={'Tester'} size={250} round={true}/>
+                    </Badge>
+                </OverlayTrigger>
+                </Row>
+                <ButtonGroup>
                 <Button variant="outline-secondary" name="goals" onClick={this.handleClick}>Goals</Button>
                 <Button variant="outline-secondary" name="friends" onClick={this.handleClick}>Friends</Button>
                 <Button variant="outline-secondary" name="new goal" onClick={this.handleClick}>New Goal</Button>
+                </ButtonGroup>
             <Switch>
                 <Route path="/dashboard/goals/view/:id" component={IndividualGoal}/>
                 <Route path="/dashboard/goals/edit/:id" component={GoalForm}/>
                 <Route path="/dashboard/goals" component={Goals}/>
                 <Route path="/dashboard/friends" component={Friends}/>
-                <Route path="/dashboard/new_goal" component={GoalForm}/>
                 <Route path="/dashboard/new_friend" component={AddFriend}/>
+                <Route path="/dashboard/new_goal" component={GoalForm}/>
             </Switch>
-            </div>
-        </div>
+        </Container>
         )
     }
 }
 
-// const mapStateToProps = (state) => {
-//     return {
-//         user: state.login,
-//         goals: state.goals,
-//         friends: state.friends,
-//         alerts: state.alerts
-//     }
-// }
+const mapStateToProps = (state) => {
+    return {
+        user: state.login,
+        goals: state.goals,
+        friends: state.friends,
+        alerts: state.alerts,
+        friendRequests: state.friendRequests
+    }
+}
 
 const mapDispatchToProps = {
     currentUser,
     grabbingGoals,
     listingFriends,
-    grabbingAlerts
+    grabbingAlerts,
+    grabbingFriendRequests
 }
 
-export default connect(null, mapDispatchToProps)(Dashboard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

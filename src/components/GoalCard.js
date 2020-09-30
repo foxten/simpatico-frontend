@@ -17,7 +17,7 @@ const GoalCard = (props) =>{
     }
 
     return(
-        <div>GoalCard Here
+        <div>
             <h2>Goal: {goal.title}</h2>
             { goal.multi_user ? 
                <h2>Type: Shared | {comp.map((friend, index) => {

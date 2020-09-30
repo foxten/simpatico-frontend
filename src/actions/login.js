@@ -22,8 +22,22 @@ export const signingUp = (user) => {
     }
 }
 
+export const newFriendRequest = (friendRequest) => {
+    return {
+        type: 'NEW_FRIEND_REQUEST',
+        friendRequest
+    }
+}
+
+export const removeFriendRequest = (friendRequest) =>{
+    return {
+        type: 'REMOVE_FRIEND_REQUEST',
+
+    }
+}
+
 export const loggingOut = () =>{
     return {
-        type: LOGGING_OUT,
+        type: LOGGING_OUT
     }
 }

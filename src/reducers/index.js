@@ -2,6 +2,7 @@ import { combineReducers } from 'redux'
 import login from './login'
 import goals from './goals'
 import friends from './friends'
+import friendRequests from './friendRequests'
 import alerts from './alerts'
 import currentGoal from './currentGoal'
 import { LOGGING_OUT } from '../actions/actionTypes';
@@ -13,7 +14,8 @@ import { LOGGING_OUT } from '../actions/actionTypes';
   goals: goals,
   friends: friends,
   currentGoal: currentGoal,
-  alerts: alerts
+  alerts: alerts,
+  friendRequests: friendRequests
 });
 
 const indexReducer = (state, action) => {

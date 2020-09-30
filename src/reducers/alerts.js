@@ -4,6 +4,9 @@ export default function alerts (state=[], action){
     switch(action.type){
         case 'GRABBING_ALERTS':
             return action.alerts;
+
+        case 'DELETE_ALERT':
+            return state.filter(alert => alert.id !== action.alertId)
             
         default:
             return state

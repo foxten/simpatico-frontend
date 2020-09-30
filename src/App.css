@@ -1,9 +1,19 @@
 @import url(//fonts.googleapis.com/css?family=Lato:100);
+/* @import url(//fonts.googleapis.com/css?family=Lato:100italic); */
+body{
+  font-family: 'Lato'
+}
 
 .App {
   text-align: center;
-  font-family: 'Lato';
-  color: #064D66
+
+  min-height: 100vh;
+  justify-content: center;
+  align-items: center;
+  color: #064D66;
+  background-color: #CED6D8;
+  display: flex;
+  /* flex-direction: column; */
 }
 
 .App-logo {
@@ -11,32 +21,94 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  /* font-style: italic; */
+  font-weight: 100;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  font-size: calc(100px + 2vmin);
 }
 
 .App-link {
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.otherComps{
+  align-items: baseline;
+  padding-top: 100px;
+}
+
+/* 
+nav{
+  background-color: #949A9C;
+} */
+
+.navbar-brand{
+  font-size: calc(20px + 2vmin);
+  font-weight: 700;
+}
+
+#avatar {
+  padding-bottom: 15px;
+}
+
+
+.MuiBadge-badge.MuiBadge-anchorOriginTopRightCircle.MuiBadge-colorPrimary{
+  background-color: #D77674;
+  color: white;
+  font-family: 'Lato';
+  font-size: 1.25rem;
+  font-weight: 700;
+  border-radius: 50%;
+  min-height: 50px;
+  min-width: 50px;
+}
+
+.MuiBadge-anchorOriginTopRightCircle.MuiBadge-colorPrimary{
+  top: 47.5%;
+  right: 0%;
+}
+
+/* .alerts.card{
+  background-color: transparent;
+  width: 19rem;
+} */
+
+.popover{
+  position: left;
+  /* font-family: 'Lato'; */
+  background-color: transparent;
+}
+
+.popover-header{
+  width: 30rem;
+  background-color: transparent;
+  color: black;
+}
+.popover-body{
+  width: 30rem;
+}
+
+
+.sb-avatar__text{
+  font-family: 'Lato';
+}
+
+.card{
+  background-color: transparent;
+}
+
+.fade.show.pushedPopover.bs-popover-right{
+  position: absolute;
+  color: transparent;
+  /* font-family: 'Lato'; */
+  width: 40rem;
+    margin-top: 0px;
+    margin-right: 10px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    bottom: auto;
+    transform: translate3d(875px, 5px, 0px);
 }

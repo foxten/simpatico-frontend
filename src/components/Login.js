@@ -1,7 +1,7 @@
 import React from 'react';
 import { loggedIn } from '../actions/login';
-// import { grabbingGoals } from '../actions/goals';
 import { connect } from 'react-redux';
+import { Button, Form } from 'react-bootstrap'
 
 class Login extends React.Component{
     constructor(){
@@ -47,20 +47,16 @@ class Login extends React.Component{
         console.log(this.state)
         return (
             <div>
-                <h1>Simpatico</h1>
                 {this.state.error ? <h1>{this.state.error}</h1>: null}
-                <form onSubmit={this.handleSubmit}>
-                    {/* <Form.Group controlId="formUsername"> */}
-                    {/* <Form.Control name="username" type="text" placeholder="Enter username" onChange={this.handleInput} value={this.state.username}/>
+                <Form onSubmit={this.handleSubmit}>
+                    <Form.Group controlId="formUsername">
+                    <Form.Control name="username" type="text" placeholder="Enter username" onChange={this.handleInput} value={this.state.username}/>
                     </Form.Group>
                     <Form.Group controlId="formPassword">
                     <Form.Control name="password" type="password" placeholder="Enter password" onChange={this.handleInput} value={this.state.password}/>
-                    </Form.Group> */}
-                    <input name='username' placeholder='username' onChange={this.handleInput} value={this.state.username}></input>
-                    <input type='password' name='password' placeholder='password' onChange={this.handleInput} value={this.state.password}></input>
-                    <button type='submit'>Submit</button>
-                    {/* <Button variant="outline-dark" type="submit" size="lg">Log In</Button> */}
-                </form>
+                    </Form.Group>
+                    <Button variant="outline-dark" type="submit" size="lg">Log In</Button>
+                </Form>
             </div>
         )
     }

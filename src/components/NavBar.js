@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { loggingOut } from '../actions/login';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap'
+import { Button, ButtonGroup, Nav, Navbar } from 'react-bootstrap'
 
 
 
 
 const NavBar = (props) =>{
-    console.log(props.info)
-
+    console.log(props.info.location.pathname)
+    
     const handleClick = (event) =>{
         if (event.target.name === 'login'){
             props.info.history.push('/login')
@@ -22,16 +22,17 @@ const NavBar = (props) =>{
     }
 
     return (
-        <div>
+        <Navbar fixed="top" className={props.info.location.pathname === '/' ? 'justify-content-end' : 'justify-content-between'} style={{ width: "100%" }}>
+            {props.info.location.pathname === '/' ? null : <Navbar.Brand>Simpatico</Navbar.Brand>}
             {props.user !== null ?
             <Button variant="outline-secondary" name="logout" onClick={handleClick}>Logout</Button>
             :
-            <div>
+            <ButtonGroup>
             <Button variant="outline-secondary"  name="login" onClick={handleClick}>Log In</Button>
             <Button variant="outline-secondary"  name="signup" onClick={handleClick}>Sign Up</Button>
-            </div>
+            </ButtonGroup>
             }
-        </div>
+        </Navbar>
     )
 }
 

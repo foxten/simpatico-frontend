@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { editGoal, addGoal } from '../actions/goals';
 import { filteringGoal } from '../actions/currentGoal';
+import { Button, Form, Row } from 'react-bootstrap'
+
 
 // FETCH REQUESTS - POST and PATCH
 
@@ -50,7 +52,8 @@ class GoalForm extends React.Component{
     }
 
     handleInput = event =>{
-        if(event.target.className !== 'marker'){
+        console.log(event.target.className)
+        if(event.target.className !== 'marker form-control'){
             this.setState({
             [event.target.name]: event.target.value
         })} else {
@@ -156,7 +159,7 @@ class GoalForm extends React.Component{
                     const reqObj = {
                         method: 'POST',
                         headers: {'Authorization': `Bearer ${token}`,'Content-Type': 'application/json'},
-                        body: JSON.stringify({user_id: friend.id, goal_id: data.goal.id})
+                        body: JSON.stringify({user_id: friend.id, goal_id: this.props.current.goal.id})
                     }
     
                     fetch('http://localhost:3000/user_group_goals', reqObj)
@@ -264,35 +267,63 @@ class GoalForm extends React.Component{
 
         return (
             <div>
-                <h2>Goal Form</h2>
-                <form name={this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'} onSubmit={this.handleSubmit}>
-                    <input type='text' placeholder='Goal' name='title' onChange={this.handleInput} value={this.state.title}></input><br/>
-                    <input type='date' name='deadline' onChange={this.handleInput} value={this.state.deadline}></input><br/>
-                    <label>Multi-User?</label><input type='checkbox' name='multi_user' onChange={this.handleChecks} checked={this.state.multi_user}></input><br/>
+                {/* <h2>Goal Form</h2> */}
+                <Form name={this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'} onSubmit={this.handleSubmit}>
+                    <Form.Group controlId="formGoal">
+                    <Form.Control name="title" type="text" placeholder="Goal" onChange={this.handleInput} value={this.state.title}/>
+                    </Form.Group>
+                    {/* <input type='text' placeholder='Goal' name='title' onChange={this.handleInput} value={this.state.title}></input><br/> */}
+                    
+                    <Form.Group controlId="formDeadline">
+                    <Form.Control name="deadline" type="date" onChange={this.handleInput} value={this.state.deadline}/>
+                    </Form.Group>
+                    {/* <input type='date' name='deadline' onChange={this.handleInput} value={this.state.deadline}></input><br/> */}
+
+                    <Form.Group controlId="formMultiUser">
+                    <Form.Check name="multi_user" type="checkbox" onChange={this.handleChecks} checked={this.state.multi_user} label="Multi-User?"/>
+                    </Form.Group>
+                    {/* <input type='checkbox' name='multi_user' onChange={this.handleChecks} checked={this.state.multi_user}></input><br/> */}
                     
                     {this.state.multi_user === true ? 
                         this.state.friend.map((friend, index) => {
-                            return <div key={index}><select name='friend' value={friend.id} onChange={this.handleChecks}>
+                            return <div key={index}>
+                                <Form.Group controlId="formFriends">
+                                <Form.Control as="select" name="friend" value={friend.id} onChange={this.handleChecks}>
+                                {/* <select name='friend' value={friend.id} onChange={this.handleChecks}> */}
                                 <option> -- select an option -- </option>
                                 {this.props.friends.map((friendLI, index) => {
                                     return <option key={index} value={friendLI.id}>{friendLI.first_name}</option>})}
-                                    </select></div>
+                                    </Form.Control>
+                                    </Form.Group>
+                                    </div>
                                 }): null}
+
+                    <Form.Group controlId="formPrivate">
+                    <Form.Check name='publicly_viewable' type="checkbox" onChange={this.handleChecks} checked={!this.state.publicly_viewable} label="Private?"/>
+                    </Form.Group>
+                    {/* <label>Private?</label><input type='checkbox' name='publicly_viewable' onChange={this.handleChecks} checked={!this.state.publicly_viewable}></input><br/> */}
                     
-                    <label>Private?</label><input type='checkbox' name='publicly_viewable' onChange={this.handleChecks} checked={!this.state.publicly_viewable}></input><br/>
+                    
+                    <Form.Group controlId="formMarker">
                     {this.state.markers.map((marker, index) =>{
                         return (<div key={index}>
-                            {marker.title !== '' ? <input type='checkbox' name='accomplished' data-id={index} checked={marker.accomplished} onChange={this.handleChecks} disabled={marker.accomplished === true? true : false}></input> : null }
-                            {marker.accomplished === true ? <label>{marker.title}</label> : <input type='text' className='marker' name='title' data-id={index} onChange={this.handleInput} value={marker.title}></input>}
+                            <Row sm={2}>
+                            {marker.title !== '' ? 
+                            <Form.Check name="accomplished" type="checkbox" data-id={index} checked={marker.accomplished} onChange={this.handleChecks} disabled={marker.accomplished === true? true : false}/> : null }
+                            {marker.accomplished === true ? <Form.Label>{marker.title}</Form.Label> : 
+                            <Form.Control className='marker' name="title" type="text" data-id={index} onChange={this.handleInput} value={marker.title}/>}
+                            </Row>
                         </div>)
                     })}
-                    <button name= 'newMarker' onClick={this.newField}>Add Marker</button>
-                    <button name= 'newFriend' onClick={this.newField}>Add Friend</button>
+                    </Form.Group>
+                    
+                    <Button variant="outline-secondary" name= 'newMarker' onClick={this.newField}>Add Marker</Button>
+                    <Button variant="outline-secondary" name= 'newFriend' onClick={this.newField}>Add Friend</Button>
                    
                     {this.state.markers.length > 0  && this.state.markers[0].title !== '' ? 
-                    <button type='submit'>{this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'}</button> :
+                    <Button variant="outline-secondary" type='submit'>{this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'}</Button> :
                     null}
-                </form>
+                </Form>
             </div>
             )
         }
