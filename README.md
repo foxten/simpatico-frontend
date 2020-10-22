@@ -19,7 +19,7 @@ To see the project in action, view the [demo video](https://drive.google.com/fil
 
 #### Task List
 
-- [] Add phone number verification (In progress)
+- [] Add phone number verification *(In progress)*
 - [] Automated alerts
 - [] Implement ActiveStorage for user photos
 - [] Implement collaborative goal tracking
