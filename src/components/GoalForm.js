@@ -263,7 +263,7 @@ class GoalForm extends React.Component{
         
 
     render(){
-        console.log(this.state.friend)
+        console.log(this.state)
 
         return (
             <div>
@@ -317,11 +317,11 @@ class GoalForm extends React.Component{
                     })}
                     </Form.Group>
                     
-                    <Button variant="outline-secondary" name= 'newMarker' onClick={this.newField}>Add Marker</Button>
-                    <Button variant="outline-secondary" name= 'newFriend' onClick={this.newField}>Add Friend</Button>
+                    <Button variant="outline-dark" name= 'newMarker' onClick={this.newField}>Add Marker</Button>
+                    <Button variant="outline-dark" name= 'newFriend' onClick={this.newField}>Add Friend</Button>
                    
                     {this.state.markers.length > 0  && this.state.markers[0].title !== '' ? 
-                    <Button variant="outline-secondary" type='submit'>{this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'}</Button> :
+                    <Button variant="outline-dark" type='submit'>{this.props.location.pathname === '/dashboard/new_goal' ? 'Submit' : 'Update'}</Button> :
                     null}
                 </Form>
             </div>

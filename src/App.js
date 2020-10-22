@@ -5,6 +5,8 @@ import Login from './components/Login'
 import Signup from './components/Signup'
 import Dashboard from './components/Dashboard'
 import NavBar from './components/NavBar'
+import Footer from './components/Footer'
+import { Container } from 'react-bootstrap'
 
 
 function App(props) {

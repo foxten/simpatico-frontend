@@ -17,9 +17,11 @@ import AddFriend from './AddFriend'
 import Avatar from 'react-avatar';
 import { Badge } from '@material-ui/core';
 
-
-
 class Dashboard extends React.Component{
+    state = {
+        username: ''
+    }
+
     componentDidMount(){
         const token = localStorage.getItem('userToken')
         if(!token){
@@ -39,6 +41,7 @@ class Dashboard extends React.Component{
                         this.props.listingFriends(userInfo.user.friends)
                         this.props.grabbingAlerts(userInfo.user.alerts)
                         this.props.grabbingFriendRequests(userInfo.user.friend_requests)
+                        this.setState({username: this.props.user.first_name})
                     })
             }
     }
@@ -52,12 +55,13 @@ class Dashboard extends React.Component{
             this.props.history.push('/dashboard/new_goal')
         }
     }
-
     
     render(){
+
+        console.log(this.props)
         const alertsPopover = (
             <Popover bsPrefix='pushedPopover'>
-                <Popover.Title as="h3">Alerts</Popover.Title>
+                <Popover.Title as="h3">{this.props.alerts.length > 0 ? 'Alerts' : 'No Alerts'}</Popover.Title>
                 <Popover.Content>
                 <Alerts />
                 </Popover.Content>
@@ -70,14 +74,14 @@ class Dashboard extends React.Component{
                 <Row className="justify-content-md-center" id="avatar">
                 <OverlayTrigger trigger='click' placement="right-end" overlay={alertsPopover}>
                 <Badge color="primary" overlap="circle" badgeContent={this.props.alerts.length}>
-                    <Avatar name={'Tester'} size={250} round={true}/>
+                    <Avatar name={this.state.username} size={250} round={true}/>
                     </Badge>
                 </OverlayTrigger>
                 </Row>
                 <ButtonGroup>
-                <Button variant="outline-secondary" name="goals" onClick={this.handleClick}>Goals</Button>
-                <Button variant="outline-secondary" name="friends" onClick={this.handleClick}>Friends</Button>
-                <Button variant="outline-secondary" name="new goal" onClick={this.handleClick}>New Goal</Button>
+                <Button variant="outline-dark" name="goals" onClick={this.handleClick}>Goals</Button>
+                <Button variant="outline-dark" name="friends" onClick={this.handleClick}>Friends</Button>
+                <Button variant="outline-dark" name="new goal" onClick={this.handleClick}>New Goal</Button>
                 </ButtonGroup>
             <Switch>
                 <Route path="/dashboard/goals/view/:id" component={IndividualGoal}/>

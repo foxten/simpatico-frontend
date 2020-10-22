@@ -1,7 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { Row, Col, Container } from 'react-bootstrap'
+import { Row, Form, Col, Container } from 'react-bootstrap'
 import FriendCard from '../components/FriendCard';
+import SearchIcon from '@material-ui/icons/Search';
 
 // style idea: include little search icon in search bar
 
@@ -42,9 +43,12 @@ class AddFriend extends React.Component {
         return (
         <div>
              <Row className="justify-content-md-center">
-                <form>
-                    <input type='text' name='searchTerm' value={this.state.searchTerm} onChange={this.handleSearch}></input>
-                </form>
+                <Form>
+                    <Form.Group controlId='formSearch'>
+                        <Form.Control type='text' name='searchTerm' placeholder='Search...' value={this.state.searchTerm} onChange={this.handleSearch} />
+                    </Form.Group>
+                    {/* <input type='text' name='searchTerm' value={this.state.searchTerm} onChange={this.handleSearch}></input> */}
+                </Form>
             </Row>
             <Row sm={3}> 
             {filteredUsers.map((user, index) =>{

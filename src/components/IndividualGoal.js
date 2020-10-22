@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Button, ButtonGroup } from 'react-bootstrap'
-import ProgressBar from './ProgressBar';
+import { Button, ButtonGroup, ProgressBar, Row, Card } from 'react-bootstrap'
+// import ProgressBar from './ProgressBar';
 import Markers from '../containers/Markers';
 import { deleteGoal } from '../actions/goals'
 
@@ -11,7 +11,7 @@ const IndividualGoal = (props) =>{
     // debugger
     const { id } = props.match.params
     const { goal, markers } = props.current
-    const status = (markers.filter(marker => marker.accomplished === true).length / markers.length) * 100
+    const status = Math.round((markers.filter(marker => marker.accomplished === true).length / markers.length) * 100)
 
     const handleClick = event =>{
         const token = localStorage.getItem('userToken')
@@ -33,18 +33,25 @@ const IndividualGoal = (props) =>{
     console.log(props)
 
     return (
-        <div>
+        <Card>
             <h2>Goal: {goal.title}</h2>
-            <h2>Type: {goal.multi_user === false  ? 'Personal' : 'Shared'}</h2>
-            <h2>Deadline: {goal.deadline}</h2>
-            <h2>Status: </h2><ProgressBar completed={markers.length > 0 ? status : "Add markers to track progress"} bgcolor={"#6a1b9a"}/>
-            <h2>Benchmarks:</h2>
+            <Card.Body>
+            <h4>Type: {goal.multi_user === false  ? 'Personal' : 'Shared'}</h4>
+            <h4>Deadline: {new Date(`${goal.deadline} 00:00:00`).toDateString()}</h4>
+            <Row className='justify-content-center'>
+            <ProgressBar now={status} label={markers.length > 0 ? `${status}%`: "Add markers to track progress"}/>
+            </Row>
+            <hr></hr>
+            <h4>Tasks</h4>
             <Markers markers={markers.sort(function(a, b){return a.id - b.id})}/>
+            <hr></hr>
+
             <ButtonGroup>
-            <Button variant="outline-secondary" name='remove goal' onClick={handleClick}>Remove Goal</Button>
-            <Button variant="outline-secondary" name='edit goal' onClick={handleClick}>Edit Goal</Button>
+            <Button variant="outline-dark" name='remove goal' onClick={handleClick}>Remove Goal</Button>
+            <Button variant="outline-dark" name='edit goal' onClick={handleClick}>Edit Goal</Button>
             </ButtonGroup>
-            </div>
+            </Card.Body>
+        </Card>
     )
 }
 

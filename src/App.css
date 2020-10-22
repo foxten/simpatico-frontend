@@ -1,16 +1,17 @@
 @import url(//fonts.googleapis.com/css?family=Lato:100);
 /* @import url(//fonts.googleapis.com/css?family=Lato:100italic); */
 body{
-  font-family: 'Lato'
+  font-family: 'Lato';
+  font-weight: 700;
+  color: black;
 }
 
 .App {
   text-align: center;
-
+  padding-bottom: 50px;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
-  color: #064D66;
   background-color: #CED6D8;
   display: flex;
   /* flex-direction: column; */
@@ -71,11 +72,6 @@ nav{
   right: 0%;
 }
 
-/* .alerts.card{
-  background-color: transparent;
-  width: 19rem;
-} */
-
 .popover{
   position: left;
   /* font-family: 'Lato'; */
@@ -87,6 +83,7 @@ nav{
   background-color: transparent;
   color: black;
 }
+
 .popover-body{
   width: 30rem;
 }
@@ -103,7 +100,6 @@ nav{
 .fade.show.pushedPopover.bs-popover-right{
   position: absolute;
   color: transparent;
-  /* font-family: 'Lato'; */
   width: 40rem;
     margin-top: 0px;
     margin-right: 10px;
@@ -111,4 +107,41 @@ nav{
     margin-left: 0px;
     bottom: auto;
     transform: translate3d(875px, 5px, 0px);
+}
+
+.progress{
+  background-color: #D77674;
+  border: 1px solid #31616B;
+  width: 50%;
+}
+
+.progress-bar{
+    background-color:#31616B;
+    font-weight: 700;
+    /* background-color:#6D969E; */
+}
+
+.tooltip{
+  font-family: 'Lato';
+  font-weight: 1000;
+}
+
+.linkBar{
+  padding-bottom: 10px;
+}
+
+.btn-group{
+  padding-bottom: 15px;
+}
+
+.card-body{
+  padding: 5px;
+}
+
+.footer{
+  text-align: center;
+  column-span: all;
+  position: absolute;
+  background-color: black;
+
 }

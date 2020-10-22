@@ -1,8 +1,9 @@
 import React from 'react';
+import { Card } from 'react-bootstrap'
 
 const MarkerListItem = (props) =>{
     return (
-        props.data.accomplished === true? <strike><h4><li>{props.data.title}</li></h4></strike> : <h4><li>{props.data.title}</li></h4>
+        props.data.accomplished === true? <strike><Card.Text><li>{props.data.title}</li></Card.Text></strike> : <Card.Text><li>{props.data.title}</li></Card.Text>
     )
 }
 

@@ -39,7 +39,8 @@ const FriendCard = (props) =>{
         <Card>
         <Card.Body>
         <Avatar name={props.info.first_name} size={150} round={true} />
-        <h2>{props.info.first_name}{props.info.last_initial}</h2>
+        <Card.Title>{props.info.first_name} {props.info.last_initial}</Card.Title>
+        <Button variant='outline-dark'>View Profile</Button>
         {props.location.pathname === '/dashboard/new_friend' ?  
             <Button id={props.info.id} variant="outline-dark" sz='sm' onClick={handleClick} disabled={ existingRequests.includes(props.info.id) ? true : false }>
                 { existingRequests.includes(props.info.id) ? 'Friend Request Pending!' : 'Add Friend'}</Button>

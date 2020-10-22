@@ -10,7 +10,9 @@ const Friends = (props) =>{
     return (
         <Container>
             <Row className="justify-content-md-center">
+                <div className='linkBar'>
                 <Link to='/dashboard/new_friend'>Add Friend</Link> 
+                </div>
             </Row>
             <Row sm={3}>
             {props.friends.map((friendInfo, index) =>{

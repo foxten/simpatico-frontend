@@ -12,6 +12,7 @@ import Avatar, { ConfigProvider } from 'react-avatar';
 
 
 
+
 const store = createStore( 
   indexReducer, 
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
@@ -22,7 +23,7 @@ ReactDOM.render(
   <BrowserRouter>
   <Provider store={store}>
     <React.StrictMode>
-      <ConfigProvider colors={['#36236B','#6B2A6A', '#597994', '#9E6D74']}>
+      <ConfigProvider colors={['#36236B','#6B2A6A', '#597994', '#9E6D74', '#9E6D82', '#6B3146', '#A3546F']}>
       <Route path='/' component={App}/>
       </ConfigProvider>
     </React.StrictMode>
